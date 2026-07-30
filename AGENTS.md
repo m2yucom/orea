@@ -10,6 +10,18 @@ npm run build    # production build
 npm run lint     # ESLint (Next.js built-in config — no local eslintrc)
 ```
 
+## Skills
+
+Reusable skills live under `skills/`. **Before creating, designing, or adding an
+animated component — or adding a registry entry — read and follow the relevant skill.**
+
+- **`skills/orea-animated-ui/`** — how to build orea-style animated components and
+  register them. Start at `skills/orea-animated-ui/SKILL.md`, then use its
+  `references/` (`design-tokens.md`, `animation-patterns.md`, `registry-workflow.md`)
+  and the `examples/component-template.tsx` scaffold. This skill is portable and
+  works with any AGENTS.md/SKILL.md-aware agent (Claude Code, Antigravity, Codex,
+  OpenCode, Cursor, Windsurf).
+
 ## Architecture
 
 - **`components/library/`** — Each `.tsx` file is a standalone `"use client"` animated demo component. Must be registered in `registry.tsx` to appear on the gallery page.
