@@ -148,6 +148,33 @@ Keep ambient loops subtle and low-frequency. Gate them behind reduced-motion whe
 </motion.ul>
 ```
 
+## 9. Bounded glow surface (contained shimmer, raised edge)
+
+For effects that live *inside* a card (shimmer fields, auroras, animated fills). The
+golden rule: **a colored light effect must never leak past the surface it belongs to.**
+
+Containment checklist:
+
+- Put every colored layer inside a wrapper with `overflow-hidden` + the same `rounded-*`.
+- Fade the moving layer out *before* the edge with a radial mask, so there is no hard cutoff:
+  `[mask-image:radial-gradient(78%_78%_at_50%_50%,black,transparent)]`.
+- For a "raised / embossed" edge, use an **`inset` box-shadow**, never an outer one. An
+  outer `box-shadow: 0 0 Npx color` renders *outside* the box and bleeds into the page.
+
+```tsx
+// highlight (top) + shade (bottom) = raised feel; colored inset can pulse on a phase.
+const glowAlpha = useTransform(phase, (p) => 0.18 + (Math.sin(p * Math.PI * 2) + 1) * 0.11)
+const innerGlow = useMotionTemplate`inset 0 1px 0 0 rgba(255,255,255,0.14), inset 0 -10px 24px -12px rgba(0,0,0,0.7), inset 0 0 22px 2px rgba(56,189,248,${glowAlpha})`
+
+<div className="relative h-40 w-40 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950">
+  <motion.div className="absolute inset-0 blur-md [mask-image:radial-gradient(78%_78%_at_50%_50%,black,transparent)]" style={{ background: shimmer }} />
+  <motion.div className="pointer-events-none absolute inset-0 rounded-2xl" style={{ boxShadow: innerGlow }} />
+</div>
+```
+
+Only use an outer colored `box-shadow` when the effect is *meant* to spill onto the page
+(e.g. a deliberate ambient halo) — and say so. When in doubt, contain it.
+
 ---
 
 ## Reduced motion
